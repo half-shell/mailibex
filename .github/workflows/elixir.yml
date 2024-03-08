@@ -15,11 +15,11 @@ permissions:
   contents: read
 
 jobs:
-  build:
-
-    name: Build and test
-    runs-on: ubuntu-latest
-
+  test:
+    strategy:
+      matrix:
+        platform: [ubuntu-22.04, windows-latest]
+    runs-on: ${{ matrix.platform }}
     steps:
     - uses: actions/checkout@v3
     - name: Set up Elixir
@@ -36,8 +36,6 @@ jobs:
     - name: Install dependencies
       run: |
         mix deps.get
-        sudo apt-get update
-        sudo apt-get install -y gcc
         make all
     - name: Run tests
       run: mix test
