@@ -5,7 +5,16 @@ ERL_INTERFACE_INCLUDE_DIR ?= $(shell erl -noshell -eval "io:format(\"~s\", [code
 ERL_INTERFACE_LIB_DIR ?= $(shell erl -noshell -eval "io:format(\"~s\", [code:lib_dir(erl_interface, lib)])." -s erlang halt)
 ICONV = "./iconv_nif.c"
 
-CFLAGS   = -fPIC -I $(ERTS_INCLUDE_DIR) -I $(ERL_INTERFACE_INCLUDE_DIR) -Wall -Werror -Wmissing-prototypes
+
+UNAME_SYS := $(shell uname -s)
+
+ifeq ($(UNAME_SYS), Darwin)
+	CFLAGS   = -fPIC -I $(ERTS_INCLUDE_DIR) -I $(ERL_INTERFACE_INCLUDE_DIR) -Wall -Werror -Wmissing-prototypes
+	LDFLAGS += -flat_namespace -undefined suppress
+else ifeq ($(UNAME_SYS), Linux)
+	CFLAGS   = -fPIC -I $(ERTS_INCLUDE_DIR) -I $(ERL_INTERFACE_INCLUDE_DIR) -Wall -Werror -Wmissing-prototypes
+endif
+
 LDLIBS   += -L "$(ERL_INTERFACE_LIB_DIR)"
 LDFLAGS  += -shared
 
