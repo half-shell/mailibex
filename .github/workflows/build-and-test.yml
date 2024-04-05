@@ -13,7 +13,16 @@ jobs:
   linux:
     strategy:
       matrix:
-        versions: [{os: 'ubuntu-20.04', otp: '23.3.4.9', elixir: '1.13.4-otp-23'}, {os: 'ubuntu-22.04', otp: '25.3.2.9', elixir: '1.15.7-otp-25'}]
+        versions:
+          - os: 'ubuntu-20.04'
+            otp: '23.3.4.9'
+            elixir: '1.13.4-otp23'
+          - os: 'ubuntu-22.04'
+            otp: '25.3.2.9'
+            elixir: '1.15.7-otp-25'
+          - os: 'win22'
+            otp: '25.3.2.9'
+            elixir: '1.15.7-otp-25'
     runs-on: ${{matrix.versions.os}}
     steps:
     - uses: actions/checkout@v3
